@@ -11,12 +11,12 @@
 
 	<context:component-scan base-package="com.cxf.spring.services" />
 
-	<jaxrs:server id="productServices" address="/productServices">
+	<jaxrs:server id="customerServices" address="/customerServices">
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
 		</jaxrs:providers>
 		<jaxrs:serviceBeans>
-			<ref bean="productServiceImpl" />
+			<ref bean="customerServiceImpl" />
 		</jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="xml" value="application/xml" />
@@ -24,8 +24,42 @@
 		</jaxrs:extensionMappings>
 	</jaxrs:server>
 
-	<bean id="productServiceImpl" class="com.cxf.spring.services.impl.ProductServiceImpl" />
-	<bean id="productDao" class="com.cxf.spring.dao.ProductDao" />
+	<bean id="customerServiceImpl" class="com.cxf.spring.services.impl.CustomerServiceImpl" />
 
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="typeAliasesPackage" value="com.cxf.spring.model" /> -->
+	</bean>
+
+<!-- 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.cxf.spring.dao" />
+	</bean> -->
+
+	<bean id="customerDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.cxf.spring.dao.CustomerDAO" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- <bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean> -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="5" />
+		<property name="maxWait" value="15000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="false" />
+	</bean>
+
+	<context:property-placeholder location="classpath:jdbc.properties" />
 
 </beans>

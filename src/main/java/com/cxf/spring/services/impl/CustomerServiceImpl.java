@@ -3,6 +3,7 @@ package com.cxf.spring.services.impl;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,8 +12,11 @@ import com.cxf.spring.model.Customer;
 import com.cxf.spring.services.CustomerService;
 
 public class CustomerServiceImpl implements CustomerService {
+    
+    static Logger log = Logger.getLogger(
+            CustomerServiceImpl.class.getName());
 
-    @Autowired
+    @Autowired  
     CustomerDAO customerDAO;
 
     @Override
@@ -30,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Response getAllCustomer() {
         ObjectMapper mapper = new ObjectMapper();
         try {
+            log.debug("getAllCustomer.........");
             return Response.status(Response.Status.ACCEPTED)
                     .entity(mapper.defaultPrettyPrintingWriter().writeValueAsString(customerDAO.selectAllCustomers()))
                     .build();

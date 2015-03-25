@@ -1,5 +1,7 @@
 package com.cxf.spring.services.impl;
 
+import java.util.List;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -51,6 +53,19 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             return Response.status(Response.Status.ACCEPTED)
                     .entity(mapper.defaultPrettyPrintingWriter().writeValueAsString(customer)).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Response.status(Status.BAD_REQUEST).build();
+    }
+
+    //Input json : [1,2,3,4,5]
+    @Override
+    public Response getCustomersByIds(List<Long> customerIds) {
+        log.error("customerIds : "+customerIds);
+        try {
+            return Response.status(Response.Status.ACCEPTED).entity("<customer><ids>"+customerIds+"</ids></customer>")
+                    .build();
         } catch (Exception e) {
             e.printStackTrace();
         }

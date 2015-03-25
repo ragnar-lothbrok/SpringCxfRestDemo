@@ -1,5 +1,7 @@
 package com.cxf.spring.services;
 
+import java.util.List;
+
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -33,5 +35,11 @@ public interface CustomerService {
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/product")
     public Response saveCustomer(Customer customer);
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({ MediaType.APPLICATION_XML })
+    @Path("/product/customers")
+    public Response getCustomersByIds(List<Long> customerIds);
 
 }
